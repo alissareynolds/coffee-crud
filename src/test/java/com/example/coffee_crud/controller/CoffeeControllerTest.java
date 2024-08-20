@@ -5,7 +5,6 @@ import com.example.coffee_crud.models.Coffee;
 import com.example.coffee_crud.service.CoffeeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +34,48 @@ class CoffeeControllerTest {
         mockCoffeeService = Mockito.mock(CoffeeService.class);
         coffeeController = new CoffeeController(mockCoffeeService);
     }
+
+    @Test
+    public void createCoffee_shouldReturnCoffeeAndCREATEDHttpStatus() {
+        Mockito.when(mockCoffeeService.create(Mockito.any())).thenReturn(recordWithId);
+        ResponseEntity<Coffee> response = coffeeController.createCoffee(input);
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(recordWithId, response.getBody());
+    }
+
+    @Test
+    public void getAllCoffee_shouldReturnListOfCoffeeAndOKHttpStatus() {
+        List<Coffee> coffees = new ArrayList<>();
+        coffees.add(input);
+        coffees.add(input2);
+        Mockito.when(mockCoffeeService.getAll()).thenReturn(coffees);
+        ResponseEntity<List<Coffee>> response = coffeeController.getAllCoffee();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(coffees, response.getBody());
+    }
+
+    @Test
+    public void getCoffeeById_shouldReturnCoffeeAndOKHttpStatus() {
+        Mockito.when(mockCoffeeService.getById(recordWithId.getId())).thenReturn(recordWithId);
+        ResponseEntity<Coffee> response = coffeeController.getCoffeeById(recordWithId.getId());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(recordWithId, response.getBody());
+    }
+
+    @Test
+    public void getCoffeeById_shouldReturn404WhenCoffeeNotFound() {
+        Mockito.when(mockCoffeeService.getById(id)).thenThrow(new CoffeeNotFoundException("A coffee with id: " + id + " was not found."));
+        ResponseEntity<Coffee> response = coffeeController.getCoffeeById(id);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void getCoffeeByName_shouldReturnListOfCoffeeAndOKHttpStatus() {
+        Mockito.when(mockCoffeeService.getByName(recordWithId.getName())).thenReturn(List.of(recordWithId));
+        ResponseEntity<List<Coffee>> response = coffeeController.getCoffeeByName(recordWithId.getName());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(List.of(recordWithId), response.getBody());
+    }
+
 
 }
