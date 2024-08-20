@@ -93,4 +93,15 @@ public class CoffeeControllerIntegrationTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
+    @Test
+    public void deleteCoffee() throws Exception {
+        Mockito.when(mockCoffeeService.getById(UUID.fromString("59c47568-fde0-4dd7-9aef-03db6a962810"))).thenReturn(coffee);
+        mvc.perform( MockMvcRequestBuilders
+                        .delete("/api/coffee/59c47568-fde0-4dd7-9aef-03db6a962810")
+                        .content(asJsonString(coffee))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 }
