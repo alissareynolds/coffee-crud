@@ -87,4 +87,108 @@ class CoffeeServiceTest {
         assertEquals("A coffee with id: " + id + " was not found.", exception.getMessage());
     }
 
+    @Test
+    public void patch_throwsExceptionWhenCoffeeWasNotFound() {
+        Mockito.when(mockCoffeeRepository.findById(id)).thenReturn(Optional.empty());
+        CoffeeNotFoundException exception = assertThrows(CoffeeNotFoundException.class, () -> coffeeService.patch(input, id));
+        assertEquals("A coffee with id: " + id + " was not found.", exception.getMessage());
+    }
+
+    @Test
+    public void patch_shouldReturnUpdatedName() {
+        Coffee input = new Coffee();
+        input.setName("Vanilla Latte");
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Vanilla Latte", response.getName());
+        assertEquals("Almond", response.getMilk());
+        assertEquals(2, response.getShots());
+        assertEquals(LARGE, response.getSize());
+        assertEquals(false, response.getIsHot());
+        assertEquals(true, response.getIsIced());
+    }
+
+    @Test
+    public void patch_shouldReturnUpdatedMilk() {
+        Coffee input = new Coffee();
+        input.setMilk("Soy");
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Caramel Macchiato", response.getName());
+        assertEquals("Soy", response.getMilk());
+        assertEquals(2, response.getShots());
+        assertEquals(LARGE, response.getSize());
+        assertEquals(false, response.getIsHot());
+        assertEquals(true, response.getIsIced());
+    }
+
+    @Test
+    public void patch_shouldReturnUpdatedShots() {
+        Coffee input = new Coffee();
+        input.setShots(4);
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Caramel Macchiato", response.getName());
+        assertEquals("Almond", response.getMilk());
+        assertEquals(4, response.getShots());
+        assertEquals(LARGE, response.getSize());
+        assertEquals(false, response.getIsHot());
+        assertEquals(true, response.getIsIced());
+    }
+
+    @Test
+    public void patch_shouldReturnUpdatedSize() {
+        Coffee input = new Coffee();
+        input.setSize(SMALL);
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Caramel Macchiato", response.getName());
+        assertEquals("Almond", response.getMilk());
+        assertEquals(2, response.getShots());
+        assertEquals(SMALL, response.getSize());
+        assertEquals(false, response.getIsHot());
+        assertEquals(true, response.getIsIced());
+    }
+
+    @Test
+    public void patch_shouldReturnUpdatedIsHot() {
+        Coffee input = new Coffee();
+        input.setIsHot(true);
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Caramel Macchiato", response.getName());
+        assertEquals("Almond", response.getMilk());
+        assertEquals(2, response.getShots());
+        assertEquals(LARGE, response.getSize());
+        assertEquals(true, response.getIsHot());
+        assertEquals(true, response.getIsIced());
+    }
+
+
+    @Test
+    public void patch_shouldReturnUpdatedIsIced() {
+        Coffee input = new Coffee();
+        input.setIsIced(false);
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenAnswer(i -> i.getArguments()[0]);
+        Coffee response = coffeeService.patch(input, recordWithId.getId());
+        assertEquals(recordWithId.getId(), response.getId());
+        assertEquals("Caramel Macchiato", response.getName());
+        assertEquals("Almond", response.getMilk());
+        assertEquals(2, response.getShots());
+        assertEquals(LARGE, response.getSize());
+        assertEquals(false, response.getIsHot());
+        assertEquals(false, response.getIsIced());
+    }
+
 }
