@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,5 +62,35 @@ public class CoffeeControllerIntegrationTest {
         mvc.perform(MockMvcRequestBuilders
                 .get("/api/coffee/59c47568-fde0-4dd7-9aef-03db6a962810").accept(MediaType.APPLICATION_JSON)
         ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void getCoffeeByName() throws Exception {
+        Mockito.when(mockCoffeeService.getByName("Caramel Macchiato")).thenReturn(List.of(new Coffee()));
+        mvc.perform(MockMvcRequestBuilders
+                .get("/api/coffee/name/Caramel Macchiato").accept(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk());
+    }
+
+    @Test
+    public void updateCoffee() throws Exception {
+        Mockito.when(mockCoffeeService.getById(UUID.fromString("59c47568-fde0-4dd7-9aef-03db6a962810"))).thenReturn(coffee);
+        mvc.perform( MockMvcRequestBuilders
+                        .put("/api/coffee/59c47568-fde0-4dd7-9aef-03db6a962810")
+                        .content(asJsonString(coffee))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void patchCoffee() throws Exception {
+        Mockito.when(mockCoffeeService.getById(UUID.fromString("59c47568-fde0-4dd7-9aef-03db6a962810"))).thenReturn(coffee);
+        mvc.perform( MockMvcRequestBuilders
+                        .patch("/api/coffee/59c47568-fde0-4dd7-9aef-03db6a962810")
+                        .content(asJsonString(coffee))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }
