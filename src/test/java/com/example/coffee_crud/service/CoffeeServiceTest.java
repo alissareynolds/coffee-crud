@@ -191,4 +191,10 @@ class CoffeeServiceTest {
         assertEquals(false, response.getIsIced());
     }
 
+    @Test
+    public void delete_callsRepositoryDeleteMethod() {
+        coffeeService.delete(id);
+        Mockito.verify(mockCoffeeRepository).deleteById(id);
+    }
+
 }
