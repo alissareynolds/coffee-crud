@@ -29,7 +29,7 @@ public class CoffeeService {
     public Coffee getById(UUID id) {
         Optional<Coffee> optionalCoffee = coffeeRepository.findById(id);
         if (optionalCoffee.isEmpty()) {
-            throw new CoffeeNotFoundException("A coffee with id: " + id + " was not found");
+            throw new CoffeeNotFoundException("A coffee with id: " + id + " was not found.");
         }
         return optionalCoffee.get();
     }
