@@ -72,4 +72,19 @@ class CoffeeServiceTest {
         assertEquals(List.of(recordWithId), response);
     }
 
+    @Test
+    public void update_shouldReturnUpdatedCoffee() {
+        Mockito.when(mockCoffeeRepository.findById(recordWithId.getId())).thenReturn(Optional.of(recordWithId));
+        Mockito.when(mockCoffeeRepository.save(Mockito.any())).thenReturn(recordWithId);
+        Coffee response = coffeeService.update(input2, recordWithId.getId());
+        assertEquals(recordWithId, response);
+    }
+
+    @Test
+    public void update_throwsExceptionWhenCoffeeWasNotFound() {
+        Mockito.when(mockCoffeeRepository.findById(id)).thenReturn(Optional.empty());
+        CoffeeNotFoundException exception = assertThrows(CoffeeNotFoundException.class, () -> coffeeService.update(input, id));
+        assertEquals("A coffee with id: " + id + " was not found.", exception.getMessage());
+    }
+
 }
