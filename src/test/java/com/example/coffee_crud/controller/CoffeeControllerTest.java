@@ -77,5 +77,18 @@ class CoffeeControllerTest {
         assertEquals(List.of(recordWithId), response.getBody());
     }
 
+    @Test
+    public void updateCoffee_shouldReturnCoffeeAndOKHttpStatus() {
+        Mockito.when(mockCoffeeService.update(input2, recordWithId.getId())).thenReturn(recordWithId2);
+        ResponseEntity<Coffee> response = coffeeController.updateCoffee(input2, recordWithId.getId());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(recordWithId2, response.getBody());
+    }
 
+    @Test
+    public void updateCoffee_shouldReturn404WhenBookNotFound() {
+        Mockito.when(mockCoffeeService.update(input, id)).thenThrow(new CoffeeNotFoundException("A coffee with id: " + id + " was not found."));
+        ResponseEntity<Coffee> response = coffeeController.updateCoffee(input, id);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
