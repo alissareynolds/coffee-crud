@@ -28,15 +28,6 @@ public class Coffee {
 
     private Boolean isIced;
 
-    public Coffee(String name, String milk, Integer shots, CoffeeSize size, Boolean isHot, Boolean isIced) {
-        this.name = name;
-        this.milk = milk;
-        this.shots = shots;
-        this.size = size;
-        this.isHot = isHot;
-        this.isIced = isIced;
-    }
-
     public UUID getId() {
         return id;
     }
